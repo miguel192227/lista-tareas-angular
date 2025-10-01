@@ -8,28 +8,38 @@ import { TareasService } from './services/tareas.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit{
-
-  listaTareas:string[] = [];
-  nuevaTarea:string = '';
+export class AppComponent implements OnInit {
+  listaTareas: string[] = [];
+  nuevaTarea: string = '';
 
   private _tareasService = inject(TareasService);
 
-ngOnInit(): void {
+  ngOnInit(): void {
     this.listaTareas = this._tareasService.getTareas();
-}
+  }
 
-agregarTarea(){
-  this._tareasService.agregarTarea(this.nuevaTarea);
-  this.nuevaTarea = '';
-  this.listaTareas = this._tareasService.getTareas();
-}
+  agregarTarea() {
+    this._tareasService.agregarTarea(this.nuevaTarea);
+    this.nuevaTarea = '';
+    this.listaTareas = this._tareasService.getTareas();
+  }
 
-eliminarTarea(index: number){
-  this._tareasService.eliminarTarea(index);
-  this.listaTareas = this._tareasService.getTareas();
-}
+  eliminarTarea(index: number) {
+    this._tareasService.eliminarTarea(index);
+    this.listaTareas = this._tareasService.getTareas();
+  }
 
+  editarTarea(index: number) {
+    const tareas = this._tareasService.getTareas();
+    const tareaActual = tareas[index];
+
+    const nuevaTarea = prompt('Editar tarea:', tareaActual);
+
+    if (nuevaTarea !== null && nuevaTarea.trim() !== '') {
+      this._tareasService.editarTarea(index, nuevaTarea);
+      this.listaTareas = this._tareasService.getTareas();
+    }
+  }
 }
